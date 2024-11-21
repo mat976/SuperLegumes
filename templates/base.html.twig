@@ -23,13 +23,16 @@
 										<a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="#">Nos Héros</a>
+										<a class="nav-link" href="{{ path('app_heros') }}">Héros</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="#">À Propos</a>
+										<a class="nav-link" href="{{ path('app_missions') }}">Missions</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="#">Contact</a>
+										<a class="nav-link" href="{{ path('app_teams') }}">Équipes</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('app_a_propos') }}">À Propos</a>
 									</li>
 								</ul>
 							</nav>
@@ -48,8 +51,9 @@
 								<p>&copy; 2023 Super Légumes. Tous droits réservés.</p>
 							</div>
 							<div class="col-md-6 text-md-end">
-								<a href="#" class="text-white me-2">Mentions légales</a>
-								<a href="#" class="text-white">Politique de confidentialité</a>
+								<a href="{{ path('app_home') }}" class="text-white me-2">Accueil</a>
+								<a href="{{ path('app_heros') }}" class="text-white me-2">Nos Héros</a>
+								<a href="{{ path('app_a_propos') }}" class="text-white me-2">À Propos</a>
 							</div>
 						</div>
 					</div>

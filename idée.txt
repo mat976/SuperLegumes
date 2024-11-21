@@ -1,0 +1,45 @@
+SuperHero
+- id
+- name (string)
+- alterEgo (string, nullable)
+- isAvailable (boolean)
+- energyLevel (integer, 0-100)
+- biography (text)
+- Disability (text)
+- imageName (string, nullable)
+- createdAt (datetime_immutable)
+
+
+Power
+- id
+- name (string)
+- description (text)
+- level (integer, 1-5)
+
+
+Team
+- id
+- name (string)
+- isActive (boolean)
+- createdAt (datetime_immutable)
+- leader (ManyToOne avec SuperHero)
+- members (ManyToMany avec SuperHero)
+- currentMission (OneToOne avec Mission)
+
+
+
+Mission
+- id
+- title (string)
+- description (text)
+- status (enum: PENDING, IN_PROGRESS, COMPLETED, FAILED)
+- startAt (datetime)
+- endAt (datetime)
+- location (string)
+- dangerLevel (integer, 1-5)
+- assignedTeam (ManyToOne avec Team)
+
+Contraintes: 
+Un héros ne peut être que dans une seule équipe
+Le leader doit avoir un niveau d'énergie > 80
+Une équipe doit avoir entre 2 et 5 membres
