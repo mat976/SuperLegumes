@@ -5,5 +5,32 @@
 
 {% block body %}
 	<h1>Nos Héros</h1>
-	<!-- Le contenu de la page sera ajouté ici plus tard -->
+
+	{% if heroes is defined and heroes|length > 0 %}
+		<div class="row">
+			{% for hero in heroes %}
+				<div class="col-md-4 mb-4">
+					<div class="card">
+						{% if hero.imageName %}
+							<img src="{{ asset('uploads/heroes/' ~ hero.imageName) }}" class="card-img-top" alt="{{ hero.name }}">
+						{% else %}
+							<img src="{{ asset('images/default-hero.jpg') }}" class="card-img-top" alt="Default Hero Image">
+						{% endif %}
+						<div class="card-body">
+							<h5 class="card-title">{{ hero.name }}</h5>
+							<p class="card-text">{{ hero.alterEgo }}</p>
+							<p class="card-text">Niveau d'énergie:
+								{{ hero.energyLevel }}</p>
+							<p class="card-text">{{ hero.isAvailable ? 'Disponible' : 'Non disponible' }}</p>
+							<a href="{{ path('app_hero_show', {'id': hero.id}) }}" class="btn btn-primary">Voir détails</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="alert alert-info" role="alert">
+			Aucun héros n'est actuellement disponible. Revenez plus tard pour découvrir nos nouveaux super-héros !
+		</div>
+	{% endif %}
 {% endblock %}
