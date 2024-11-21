@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Super-Héros
+{% endblock %}
+
+{% block body %}
+	<h1>Détails du Super-Héros</h1>
+
+	<div class="card mb-3">
+		<div class="row g-0">
+			<div class="col-md-4">
+				{% if hero.imageName %}
+					<img src="{{ asset('uploads/heroes/' ~ hero.imageName) }}" class="img-fluid rounded-start" alt="{{ hero.name }}">
+				{% else %}
+					<img src="{{ asset('images/default-hero.jpg') }}" class="img-fluid rounded-start" alt="Default Hero Image">
+				{% endif %}
+			</div>
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">{{ hero.name }}</h5>
+					<p class="card-text">Alter Ego:
+						{{ hero.alterEgo }}</p>
+					<p class="card-text">Niveau d'énergie:
+						{{ hero.energyLevel }}</p>
+					<p class="card-text">Statut:
+						{{ hero.isAvailable ? 'Disponible' : 'Non disponible' }}</p>
+
+					<h6 class="mt-4">Statistiques</h6>
+					<ul>
+						<li>Missions effectuées: À déterminer</li>
+						<li>Équipe actuelle:
+							{% if hero.teams is defined and hero.teams|length > 0 %}
+								{{ hero.teams|first.name }}
+							{% else %}
+								Aucune
+							{% endif %}
+						</li>
+						<!-- Ajoutez d'autres statistiques ici -->
+					</ul>
+
+					<div class="mt-3">
+						<a href="{{ path('app_heros_edit', {'id': hero.id}) }}" class="btn btn-primary">Modifier</a>
+						{{ include('heros/_delete_form.html.twig') }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<a href="{{ path('app_heros_index') }}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}

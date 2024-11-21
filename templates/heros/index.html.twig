@@ -1,10 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Héros - Super Légumes
+{% block title %}Liste des Super-Héros
 {% endblock %}
 
 {% block body %}
-	<h1>Nos Héros</h1>
+	<h1>Liste des Super-Héros</h1>
+
+	<div class="mb-3">
+		<form method="get" action="{{ path('app_heros_index') }}">
+			<div class="row">
+				<div class="col-md-3">
+					<label for="availability">Disponibilité</label>
+					<select name="availability" id="availability" class="form-control">
+						<option value="">Tous</option>
+						<option value="1" {% if app.request.query.get('availability') == '1' %} selected {% endif %}>Disponible</option>
+						<option value="0" {% if app.request.query.get('availability') == '0' %} selected {% endif %}>Non disponible</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label for="energyLevel">Niveau d'énergie minimum</label>
+					<input type="number" name="energyLevel" id="energyLevel" class="form-control" value="{{ app.request.query.get('energyLevel') }}">
+				</div>
+				<div class="col-md-3 align-self-end">
+					<button type="submit" class="btn btn-primary">Filtrer</button>
+				</div>
+			</div>
+		</form>
+	</div>
 
 	{% if heroes is defined and heroes|length > 0 %}
 		<div class="row">
@@ -22,7 +44,7 @@
 							<p class="card-text">Niveau d'énergie:
 								{{ hero.energyLevel }}</p>
 							<p class="card-text">{{ hero.isAvailable ? 'Disponible' : 'Non disponible' }}</p>
-							<a href="{{ path('app_hero_show', {'id': hero.id}) }}" class="btn btn-primary">Voir détails</a>
+							<a href="{{ path('app_heros_show', {'id': hero.id}) }}" class="btn btn-primary">Voir détails</a>
 						</div>
 					</div>
 				</div>
@@ -30,7 +52,9 @@
 		</div>
 	{% else %}
 		<div class="alert alert-info" role="alert">
-			Aucun héros n'est actuellement disponible. Revenez plus tard pour découvrir nos nouveaux super-héros !
+			Aucun héros trouvé.
 		</div>
 	{% endif %}
+
+	<a href="{{ path('app_heros_new') }}" class="btn btn-success">Créer un nouveau héros</a>
 {% endblock %}

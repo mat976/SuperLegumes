@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un nouveau Super-Héros
+{% endblock %}
+
+{% block body %}
+<h1>Créer un nouveau Super-Héros</h1>
+
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+{{ form_row(form.name, {'label': 'Nom'}) }}
+{{ form_row(form.alterEgo, {'label': 'Alter Ego'}) }}
+{{ form_row(form.energyLevel, {'label': 'Niveau d\'énergie'}) }}
+    {{ form_row(form.isAvailable, {'label': 'Disponible'}) }}
+    {{ form_row(form.biography, {'label': 'Biographie'}) }}
+    {{ form_row(form.disability, {'label': 'Handicap'}) }}
+    {{ form_row(form.image, {'label': 'Image du héros'}) }}
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+{{ form_end(form) }}
+
+<a href="{{ path('app_heros_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+{% endblock %}
