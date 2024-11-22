@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Équipe
+{% endblock %}
+
+{% block body %}
+	<h1>Créer une nouvelle équipe</h1>
+
+	{{ form_start(form) }}
+	<div class="row">
+		<div class="col-md-6">
+			{{ form_row(form.name) }}
+		</div>
+		<div class="col-md-6">
+			{{ form_row(form.leader) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			{{ form_row(form.members) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			{{ form_row(form.isActive) }}
+		</div>
+	</div>
+	<button class="btn btn-primary mt-3">{{ button_label|default('Créer') }}</button>
+	{{ form_end(form) }}
+
+	<a href="{{ path('app_teams_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+{% endblock %}

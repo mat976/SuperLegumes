@@ -1,39 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Équipes - Super Légumes
+{% block title %}Liste des Équipes
 {% endblock %}
 
 {% block body %}
-	<h1>Nos Équipes</h1>
+	<h1>Liste des Équipes</h1>
 
-	{% if teams is defined and teams|length > 0 %}
-		<div class="row">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Leader</th>
+				<th>Membres</th>
+				<th>Statut</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
 			{% for team in teams %}
-				<div class="col-md-6 mb-4">
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">{{ team.name }}</h5>
-							<p class="card-text">Leader:
-								{{ team.leader.name }}</p>
-							<p class="card-text">Statut:
-								{{ team.isActive ? 'Active' : 'Inactive' }}</p>
-							<p class="card-text">Membres:
-								{{ team.members|length }}</p>
-							{% if team.currentMission %}
-								<p class="card-text">Mission en cours:
-									{{ team.currentMission.title }}</p>
-							{% else %}
-								<p class="card-text">Pas de mission en cours</p>
-							{% endif %}
-							<a href="{{ path('app_team_show', {'id': team.id}) }}" class="btn btn-primary">Voir détails</a>
-						</div>
-					</div>
-				</div>
+				<tr>
+					<td>{{ team.name }}</td>
+					<td>{{ team.leader.name }}</td>
+					<td>{{ team.members|length }}</td>
+					<td>{{ team.isActive ? 'Active' : 'Inactive' }}</td>
+					<td>
+						<a href="{{ path('app_teams_show', {'id': team.id}) }}" class="btn btn-sm btn-info">Voir</a>
+						<a href="{{ path('app_teams_edit', {'id': team.id}) }}" class="btn btn-sm btn-primary">Modifier</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5">Aucune équipe trouvée</td>
+				</tr>
 			{% endfor %}
-		</div>
-	{% else %}
-		<div class="alert alert-info" role="alert">
-			Aucune équipe n'est actuellement formée. Revenez bientôt pour voir nos nouvelles formations de super-héros !
-		</div>
-	{% endif %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_teams_new') }}" class="btn btn-success">Créer une nouvelle équipe</a>
 {% endblock %}
