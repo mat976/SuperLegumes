@@ -1,37 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Missions - Super Légumes
+{% block title %}Liste des Missions
 {% endblock %}
 
 {% block body %}
-	<h1>Nos Missions</h1>
+	<h1>Liste des Missions</h1>
 
 	{% if missions is defined and missions|length > 0 %}
-		<div class="row">
-			{% for mission in missions %}
-				<div class="col-md-6 mb-4">
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">{{ mission.title }}</h5>
-							<p class="card-text">Statut:
-								{{ mission.status }}</p>
-							<p class="card-text">Niveau de danger:
-								{{ mission.dangerLevel }}</p>
-							<p class="card-text">Lieu:
-								{{ mission.location }}</p>
-							<p class="card-text">Début:
-								{{ mission.startAt|date('d/m/Y H:i') }}</p>
-							<p class="card-text">Fin:
-								{{ mission.endAt|date('d/m/Y H:i') }}</p>
-							<a href="{{ path('app_mission_show', {'id': mission.id}) }}" class="btn btn-primary">Voir détails</a>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
-		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Titre</th>
+					<th>Statut</th>
+					<th>Niveau de danger</th>
+					<th>Lieu</th>
+					<th>Date de début</th>
+					<th>Date de fin</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for mission in missions %}
+					<tr>
+						<td>{{ mission.id }}</td>
+						<td>{{ mission.title }}</td>
+						<td>{{ mission.status }}</td>
+						<td>{{ mission.dangerLevel }}</td>
+						<td>{{ mission.location }}</td>
+						<td>{{ mission.startAt ? mission.startAt|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ mission.endAt ? mission.endAt|date('Y-m-d H:i:s') : '' }}</td>
+						<td>
+							<a href="{{ path('app_missions_show', {'id': mission.id}) }}" class="btn btn-sm btn-info">Voir</a>
+							<a href="{{ path('app_missions_edit', {'id': mission.id}) }}" class="btn btn-sm btn-primary">Modifier</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	{% else %}
 		<div class="alert alert-info" role="alert">
-			Aucune mission n'est actuellement disponible. Revenez plus tard pour voir les nouvelles missions !
+			Aucune mission n'est actuellement disponible. Créez une nouvelle mission pour commencer !
 		</div>
 	{% endif %}
+
+	<a href="{{ path('app_missions_new') }}" class="btn btn-success">Créer une nouvelle mission</a>
 {% endblock %}
