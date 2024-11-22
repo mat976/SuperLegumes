@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SuperHeroRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SuperHeroRepository::class)]
+
+
 class SuperHero
 {
     #[ORM\Id]
@@ -44,11 +47,18 @@ class SuperHero
     #[ORM\ManyToMany(targetEntity: Team::class, mappedBy: 'members')]
     private $teams;
 
+    #[ORM\ManyToMany(targetEntity: Power::class, inversedBy: "superHeroes")]
+    #[ORM\JoinTable(name: "super_hero_power")]
+    private Collection $powers;
+
+
+
     public function __construct()
     {
         $this->leadingTeams = new ArrayCollection();
         $this->teams = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->powers = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -193,6 +203,27 @@ class SuperHero
         if ($this->teams->removeElement($team)) {
             $team->removeMember($this);
         }
+        return $this;
+    }
+
+    public function getPowers(): Collection
+    {
+        return $this->powers;
+    }
+
+    public function addPower(Power $power): self
+    {
+        if (!$this->powers->contains($power)) {
+            $this->powers[] = $power;
+        }
+
+        return $this;
+    }
+
+    public function removePower(Power $power): self
+    {
+        $this->powers->removeElement($power);
+
         return $this;
     }
 }

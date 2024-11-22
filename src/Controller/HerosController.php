@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SuperHero;
+use App\Entity\Power;
 use App\Form\SuperHeroType;
 use App\Repository\SuperHeroRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 
 #[Route('/heros')]
 class HerosController extends AbstractController
@@ -41,6 +41,7 @@ class HerosController extends AbstractController
             'heroes' => $heroes,
         ]);
     }
+
     #[Route('/new', name: 'app_heros_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
@@ -65,6 +66,12 @@ class HerosController extends AbstractController
                 }
 
                 $hero->setImageName($newFilename);
+            }
+
+            $newPower = $form->get('newPower')->getData();
+            if ($newPower) {
+                $entityManager->persist($newPower);
+                $hero->addPower($newPower);
             }
 
             $entityManager->persist($hero);
@@ -110,6 +117,12 @@ class HerosController extends AbstractController
                 }
 
                 $hero->setImageName($newFilename);
+            }
+
+            $newPower = $form->get('newPower')->getData();
+            if ($newPower) {
+                $entityManager->persist($newPower);
+                $hero->addPower($newPower);
             }
 
             $entityManager->flush();

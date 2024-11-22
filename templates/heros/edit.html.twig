@@ -1,29 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier le Super-Héros
+{% block title %}Modifier Héros
 {% endblock %}
 
 {% block body %}
-	<h1>Modifier le Super-Héros</h1>
+	<h1>Modifier Héros</h1>
 
-	{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-	{{ form_row(form.name, {'label': 'Nom'}) }}
-	{{ form_row(form.alterEgo, {'label': 'Alter Ego'}) }}
-	{{ form_row(form.energyLevel, {'label': 'Niveau d\'énergie'}) }}
-        {{ form_row(form.isAvailable, {'label': 'Disponible'}) }}
-        
-        {% if hero.imageName %}
-            <div class="mb-3">
-                <img src="{{ asset('uploads/heroes/' ~ hero.imageName) }}" alt="{{ hero.name }}" class="img-thumbnail" style="max-width: 200px;">
-            </div>
-        {% endif %}
-        
-        {{ form_row(form.image, {'label': 'Nouvelle image (laissez vide pour conserver l\'actuelle)'}) }}
-
-	<button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button class="btn btn-primary">{{ button_label|default('Mettre à jour') }}</button>
 	{{ form_end(form) }}
 
-	<a href="{{ path('app_heros_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+	<a href="{{ path('app_heros_index') }}">Retour à la liste</a>
 
 	{{ include('heros/_delete_form.html.twig') }}
 {% endblock %}

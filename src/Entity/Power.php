@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -20,6 +22,41 @@ class Power
 
     #[ORM\Column(type: 'integer')]
     private $level;
+
+    #[ORM\ManyToMany(targetEntity: SuperHero::class, mappedBy: "powers")]
+    private Collection $superHeroes;
+
+    public function __construct()
+    {
+        $this->superHeroes = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|SuperHero[]
+     */
+    public function getSuperHeroes(): Collection
+    {
+        return $this->superHeroes;
+    }
+
+    public function addSuperHero(SuperHero $superHero): self
+    {
+        if (!$this->superHeroes->contains($superHero)) {
+            $this->superHeroes[] = $superHero;
+            $superHero->addPower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSuperHero(SuperHero $superHero): self
+    {
+        if ($this->superHeroes->removeElement($superHero)) {
+            $superHero->removePower($this);
+        }
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
