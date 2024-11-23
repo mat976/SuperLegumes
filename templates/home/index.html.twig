@@ -1,24 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil -
-	{{ parent() }}
+{% block title %}Dashboard - Super Légumes
 {% endblock %}
 
 {% block body %}
-	<h2 class="mb-4">Bienvenue chez Super Légumes</h2>
-	<p class="lead">Découvrez nos héros extraordinaires, chacun avec ses propres super-pouvoirs uniques!</p>
-	<div class="row mt-5">
-		<div class="col-md-4">
-			<h3>Notre Mission</h3>
-			<p>Chez Super Légumes, nous célébrons la diversité et les capacités uniques de chaque individu. Notre mission est de montrer que chacun peut être un héros, quelles que soient ses différences.</p>
+	<div class="container mt-4">
+		<h1 class="mb-4">Dashboard Super Légumes</h1>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="card mb-4">
+					<div class="card-header">Missions en cours</div>
+					<div class="card-body">
+						<h5 class="card-title">Nombre de missions actives:
+							{{ missions_count }}</h5>
+						{% if active_missions is empty %}
+							<p>Aucune mission active pour le moment.</p>
+						{% else %}
+							<ul class="list-group">
+								{% for mission in active_missions %}
+									<li class="list-group-item">{{ mission.title }}</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="card mb-4">
+					<div class="card-header">Héros</div>
+					<div class="card-body">
+						{% if heroes_count == 0 %}
+							<p>Aucun héros enregistré pour le moment.</p>
+						{% else %}
+							<h5 class="card-title">Héros disponibles:
+								{{ available_heroes|length }}</h5>
+							<h5 class="card-title">Héros indisponibles:
+								{{ unavailable_heroes|length }}</h5>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<h3>Nos Héros</h3>
-			<p>Nos héros viennent de tous horizons et possèdent des capacités extraordinaires. Qu'il s'agisse de force surhumaine ou d'une intelligence exceptionnelle, chaque héros apporte quelque chose d'unique à notre équipe.</p>
-		</div>
-		<div class="col-md-4">
-			<h3>Rejoignez-nous</h3>
-			<p>Vous pensez avoir ce qu'il faut pour être un Super Légume? Nous sommes toujours à la recherche de nouveaux talents pour rejoindre notre équipe de héros extraordinaires!</p>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card mb-4">
+					<div class="card-header">Équipes</div>
+					<div class="card-body">
+						{% if teams is empty %}
+							<p>Aucune équipe enregistrée pour le moment.</p>
+						{% else %}
+							<ul class="list-group">
+								{% for team in teams %}
+									<li class="list-group-item">
+										{{ team.name }}
+										{% if team.currentMission %}
+											- En mission:
+											{{ team.currentMission.title }}
+										{% else %}
+											- Disponible
+										{% endif %}
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 {% endblock %}
