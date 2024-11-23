@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Mission;
 use App\Form\MissionType;
+use App\Form\MissionAssignType;
 use App\Repository\MissionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
-
 
 #[Route('/missions')]
 class MissionsController extends AbstractController
@@ -44,23 +44,44 @@ class MissionsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_missions_delete', methods: ['POST'])]
-    public function delete(Request $request, Mission $mission, MissionRepository $missionRepository): Response
+    public function delete(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $mission->getId(), $request->request->get('_token'))) {
-            $missionRepository->remove($mission, true);
+            $entityManager->remove($mission);
+            $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_missions_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/mission/{id}/assign', name: 'app_mission_assign')]
+    public function assign(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(MissionAssignType::class, $mission);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($mission);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La mission a été assignée avec succès.');
+            return $this->redirectToRoute('app_mission_show', ['id' => $mission->getId()]);
+        }
+
+        return $this->render('missions/assign.html.twig', [
+            'mission' => $mission,
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/{id}/edit', name: 'app_missions_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Mission $mission, MissionRepository $missionRepository): Response
+    public function edit(Request $request, Mission $mission, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MissionType::class, $mission);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $missionRepository->save($mission, true);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_missions_index', [], Response::HTTP_SEE_OTHER);
         }

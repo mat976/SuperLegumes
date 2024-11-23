@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assigner une mission à une équipe
+{% endblock %}
+
+{% block body %}
+	<h1>Assigner la mission "{{ mission.title }}" à une équipe</h1>
+
+	{{ form_start(form) }}
+	{{ form_row(form.assignedTeam) }}
+	<button type="submit" class="btn btn-success">Assigner</button>
+	{{ form_end(form) }}
+
+	<a href="{{ path('app_mission_index') }}" class="btn btn-secondary">Retour à la liste des missions</a>
+{% endblock %}

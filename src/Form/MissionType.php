@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Mission;
+use App\Entity\Team;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MissionType extends AbstractType
 {
@@ -49,6 +52,17 @@ class MissionType extends AbstractType
                     'min' => 1,
                     'max' => 10
                 ]
+            ])
+            ->add('assignedTeam', EntityType::class, [
+                'class' => Team::class,
+                'choice_label' => 'name',
+                'label' => 'Équipe assignée',
+                'required' => false,
+                'placeholder' => 'Sélectionner une équipe',
+            ])
+            ->add('assign', SubmitType::class, [
+                'label' => 'Assigner à une équipe',
+                'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
     }

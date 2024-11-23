@@ -33,7 +33,7 @@ class Mission
     #[ORM\Column(type: 'integer')]
     private $dangerLevel;
 
-    #[ORM\OneToOne(targetEntity: Team::class, mappedBy: 'currentMission')]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'missions')]
     private $assignedTeam;
 
     public function getId(): ?int

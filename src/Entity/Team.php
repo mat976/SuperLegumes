@@ -33,10 +33,15 @@ class Team
     #[ORM\OneToOne(targetEntity: Mission::class, inversedBy: 'assignedTeam')]
     private $currentMission;
 
+    #[ORM\OneToMany(mappedBy: 'assignedTeam', targetEntity: Mission::class)]
+    private $missions;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        $this->missions = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->isActive = true;
     }
 
     public function getId(): ?int
@@ -55,7 +60,7 @@ class Team
         return $this;
     }
 
-    public function isIsActive(): ?bool
+    public function isActive(): ?bool
     {
         return $this->isActive;
     }
@@ -100,13 +105,16 @@ class Team
     {
         if (!$this->members->contains($member)) {
             $this->members[] = $member;
+            $member->addTeam($this);
         }
         return $this;
     }
 
     public function removeMember(SuperHero $member): self
     {
-        $this->members->removeElement($member);
+        if ($this->members->removeElement($member)) {
+            $member->removeTeam($this);
+        }
         return $this;
     }
 
@@ -118,6 +126,33 @@ class Team
     public function setCurrentMission(?Mission $currentMission): self
     {
         $this->currentMission = $currentMission;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Mission[]
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(Mission $mission): self
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions[] = $mission;
+            $mission->setAssignedTeam($this);
+        }
+        return $this;
+    }
+
+    public function removeMission(Mission $mission): self
+    {
+        if ($this->missions->removeElement($mission)) {
+            if ($mission->getAssignedTeam() === $this) {
+                $mission->setAssignedTeam(null);
+            }
+        }
         return $this;
     }
 }
